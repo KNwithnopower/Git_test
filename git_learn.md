@@ -49,3 +49,17 @@
     * 在用户主目录里找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的秘钥对，id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。
     * 登陆GitHub，打开“Account settings”，“SSH Keys”页面,点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容：
 * 现在的情景是，你已经在本地创建了一个Git仓库后，又想在GitHub创建一个Git仓库，并且让这两个仓库进行远程同步，这样，GitHub上的仓库既可以作为备份，又可以让其他人通过该仓库来协作
+  * ```git remote add origin git@github.com:michaelliao/learngit.git```
+  * ```git branch -M main```
+  * ```git push -u origin main```
+  * 若不成功，首先输入```ssh -T -p 443 git@ssh.github.com```若显示not provide shell access，则在config文件中添加以下内容,没有config的话自己新建一个(就在你的.ssh文件夹内)，把后缀名删掉即可：
+        ```
+        Host github.com
+
+        Hostname ssh.github.com
+        
+        Port 443
+        
+        User git
+    再运行就没问题了
+* 如果添加的时候地址写错了，或者就是想删除远程库，可以用```git remote rm <name>```命令。使用前，建议先用```git remote -v```查看远程库信息：
