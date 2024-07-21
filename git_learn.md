@@ -63,3 +63,26 @@
         User git
     再运行就没问题了
 * 如果添加的时候地址写错了，或者就是想删除远程库，可以用```git remote rm <name>```命令。使用前，建议先用```git remote -v```查看远程库信息：
+## 从远程库克隆
+* 假设我们从零开发，那么最好的方式是先创建远程库，然后，从远程库克隆。
+    * 创建一个新的仓库
+    * git clone git@github.com:michaelliao/gitskills.git
+# 分支管理
+## 创建与合并分支
+* 截止到目前，只有一条时间线，在Git里，这个分支叫主分支，即master分支。HEAD严格来说不是指向提交，而是指向master，master才是指向提交的，所以，HEAD指向的就是当前分支。
+  * 一开始的时候，master分支是一条线，Git用master指向最新的提交，再用HEAD指向master，就能确定当前分支，以及当前分支的提交点
+  * 每次提交，master分支都会向前移动一步，这样，随着你不断提交，master分支的线也越来越长。
+  * 当我们创建新的分支，例如dev时，Git新建了一个指针叫dev，指向master相同的提交，再把HEAD指向dev，就表示当前分支在dev上从现在开始，对工作区的修改和提交就是针对dev分支了，比如新提交一次后，dev指针往前移动一步，而master指针不变
+  * 在dev上的工作完成了，就可以把dev合并到master上。最简单的方法，就是直接把master指向dev的当前提交，就完成了合并
+  * 合并完分支后，甚至可以删除dev分支。删除dev分支就是把dev指针给删掉，删掉后，我们就剩下了一条master分支。
+* 实操
+  * 首先，我们创建dev分支，然后切换到dev分支：```git checkout -b dev```或```git switch -c <name>```git checkout命令加上-b参数表示创建并切换,相当于```git branch dev```,```git checkout dev```或```git switch <name>```
+  * 然后，用```git branch```命令查看当前分支,git branch命令会列出所有分支，当前分支前面会标一个*号。
+  * 然后，在修改后，我们就可以在dev分支上正常提交
+      ```
+      git add readme.txt 
+      git commit -m "branch test"
+  * dev分支的工作完成，我们就可以切换回master分支
+  ```git checkout master```
+  * 现在，我们把dev分支的工作成果合并到master分支```git merge dev```
+  * 合并完成后，就可以放心地删除dev分支了```git branch -d dev```
