@@ -152,6 +152,10 @@
         git push origin dev
   * 小伙伴的最新提交和你试图推送的提交有冲突,先用git pull把最新的提交从origin/dev抓下来，然后，在本地合并，解决冲突，再推送:
     ```git pull```git pull也失败了，原因是没有指定本地dev分支与远程origin/dev分支的链接，根据提示，设置dev和origin/dev的链接：```git branch --set-upstream-to=origin/dev dev```再pull,解决后，提交，再push：```git commit -m "fix env conflict"```,```git push origin dev```
+* fetch
+  * ```git fetch```命令用于从远程 Git 仓库中拉取最新的变更,但不会自动将这些变更应用到当前分支上。相比于git pull命令，git fetch命令更加安全，因为它只是简单地同步变更，并在本地仓库中创建一个指向远程分支的“引用”，而不会自动将这些变更应用到当前分支上。
+    * git fetch命令的优点在于，它可以让开发者快速了解远程仓库的最新变更，而且不会自动修改本地分支的状态，这意味着开发者可以使用git diff或git merge命令在本地查看、比较和处理所拉取的变更，以便更好地控制代码的更新过程。
+    * 当完成了针对远程分支的变更处理后，可以使用git merge命令或者git rebase命令将本地分支与远程分支合并，以便将所拉取的变更应用到当前分支中。
 ## Rebase
 * rebase操作可以把本地未push的分叉提交历史整理成直线；
 * rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比。
