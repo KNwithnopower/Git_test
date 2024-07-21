@@ -86,3 +86,33 @@
   ```git checkout master```
   * 现在，我们把dev分支的工作成果合并到master分支```git merge dev```
   * 合并完成后，就可以放心地删除dev分支了```git branch -d dev```
+## 分支管理策略
+* 如果要强制禁用Fast forward模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息。
+*  --no-ff方式的git merge
+```git merge --no-ff -m "merge with no-ff" dev```
+*  分支策略
+   *  首先，master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；
+   *  干活都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；
+   *  你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上合并就可以了。
+## bug分支
+* 工作只进行到一半，还没法提交，预计完成还需1天时间。但是，必须在两个小时内修复该bug：Git还提供了一个stash功能，可以把当前工作现场“储藏”起来，等以后恢复现场后继续工作
+  * ```git stash```
+  * 首先确定要在哪个分支上修复bug，假定需要在master分支上修复，就从master创建临时分支
+  
+        git checkout master
+        git checkout -b issue-101
+   * 修复完成后，切换到master分支，并完成合并，最后删除issue-101分支:
+
+         git switch master
+         git merge --no-ff -m "merged bug fix 101" issue-101
+    * 接着回到dev分支干活:
+          
+          git switch dev
+          git status
+    * 用git stash list命令看刚才的工作现场,Git把stash内容存在某个地方了，但是需要恢复一下，有两个办法：
+      * 一是用git stash apply恢复，但是恢复后，stash内容并不删除，你需要用git stash drop来删除；
+      ```  git stash apply stash@{0}```指定stash恢复
+      * 另一种方式是用git stash pop，恢复的同时把stash内容也删了：
+* 同样的bug，要在dev上修复，我们只需要把4c805e2 fix bug 101这个提交所做的修改“复制”到dev分支。注意：我们只想复制4c805e2 fix bug 101这个提交所做的修改，并不是把整个master分支merge过来。
+  * 为了方便操作，Git专门提供了一个cherry-pick命令，让我们能复制一个特定的提交到当前分支：
+
