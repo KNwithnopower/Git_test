@@ -152,4 +152,26 @@
         git push origin dev
   * 小伙伴的最新提交和你试图推送的提交有冲突,先用git pull把最新的提交从origin/dev抓下来，然后，在本地合并，解决冲突，再推送:
     ```git pull```git pull也失败了，原因是没有指定本地dev分支与远程origin/dev分支的链接，根据提示，设置dev和origin/dev的链接：```git branch --set-upstream-to=origin/dev dev```再pull,解决后，提交，再push：```git commit -m "fix env conflict"```,```git push origin dev```
-  * 
+## Rebase
+* rebase操作可以把本地未push的分叉提交历史整理成直线；
+* rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比。
+# 标签管理
+* Git的标签虽然是版本库的快照，但其实它就是指向某个commit的指针（跟分支很像对不对？但是分支可以移动，标签不能移动），所以，创建和删除标签都是瞬间完成的。
+  * commit号是6a5819e...tag v1.2查找commit就行!tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起
+## 创建标签
+* 实操：
+  * 首先，切换到需要打标签的分支上
+  * 然后，敲命令git tag <name>就可以打一个新标签：```git tag v1.0```
+  * 可以用命令```git tag```查看所有标签：
+  * 找到历史提交的commit id，然后打上tag
+    * ```git log --pretty=oneline --abbrev-commit```
+    * ```git tag v0.9 f52c633```
+* 标签不是按时间顺序列出，而是按字母排序的。可以用```git show <tagname>```查看标签信息：
+* 还可以创建带有说明的标签，用-a指定标签名，-m指定说明文字：```git tag -a v0.1 -m "version 0.1 released" 1094adb```
+## 操作标签
+* 标签打错了，也可以删除```git tag -d v0.1```
+* 如果要推送某个标签到远程，使用命令```git push origin <tagname>```
+* 或者，一次性推送全部尚未推送到远程的本地标签：```git push origin --tags```
+* 如果标签已经推送到远程，要删除远程标签就麻烦一点
+  * 先从本地删除：```git tag -d v0.9```
+  * 然后，从远程删除。删除命令也是push```git push origin :refs/tags/v0.9```
