@@ -116,3 +116,40 @@
 * 同样的bug，要在dev上修复，我们只需要把4c805e2 fix bug 101这个提交所做的修改“复制”到dev分支。注意：我们只想复制4c805e2 fix bug 101这个提交所做的修改，并不是把整个master分支merge过来。
   * 为了方便操作，Git专门提供了一个cherry-pick命令，让我们能复制一个特定的提交到当前分支：
 
+## Feature分支
+* 添加一个新功能时，你肯定不希望因为一些实验性质的代码，把主分支搞乱了，所以，每添加一个新功能，最好新建一个feature分支，在上面开发，完成后，合并，最后，删除该feature分支。
+* 开发代号为Vulcan的新功能:
+  * ```git switch -c feature-vulcan```
+  * ```git add vulcan.py```
+  * ```git status```
+  * ```git commit -m "add feature vulcan"```
+  * 切回dev,```git switch dev```
+  * feature-vulcan分支还没有被合并，如果删除，将丢失掉修改，如果要强行删除，需要使用大写的-D参数。。```git branch -D feature-vulcan```
+## 多人协作
+* 当你从远程仓库克隆时，实际上Git自动把本地的master分支和远程的master分支对应起来了，并且，远程仓库的默认名称是origin。
+* 要查看远程库的信息，用```git remote```
+  * 或者，用```git remote -v```显示更详细的信息
+    * 上面显示了可以抓取和推送的origin的地址。如果没有推送权限，就看不到push的地址。
+* 推送分支
+  * ```git push origin master```
+  * 推送其他分支```git push origin dev```
+    * master分支是主分支，因此要时刻与远程同步；
+
+    * dev分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步；
+
+    * bug分支只用于在本地修复bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个bug；
+
+    * feature分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
+* 抓取分支
+  * 多人协作时，大家都会往master和dev分支上推送各自的修改。
+  * 可以在另一台电脑（注意要把SSH Key添加到GitHub）或者同一台电脑的另一个目录下克隆```git clone git@github.com:michaelliao/learngit.git```
+  * 默认情况下，你的小伙伴只能看到本地的master分支。可以用git branch命令看
+  * 创建远程origin的dev分支到本地```git checkout -b dev origin/dev```
+  * 可以在dev上继续修改，然后，时不时地把dev分支push到远程
+        ```
+        git add env.txt
+        git commit -m "add env"
+        git push origin dev
+  * 小伙伴的最新提交和你试图推送的提交有冲突,先用git pull把最新的提交从origin/dev抓下来，然后，在本地合并，解决冲突，再推送:
+    ```git pull```git pull也失败了，原因是没有指定本地dev分支与远程origin/dev分支的链接，根据提示，设置dev和origin/dev的链接：```git branch --set-upstream-to=origin/dev dev```再pull,解决后，提交，再push：```git commit -m "fix env conflict"```,```git push origin dev```
+  * 
