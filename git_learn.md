@@ -63,6 +63,11 @@
         User git
     再运行就没问题了
 * 如果添加的时候地址写错了，或者就是想删除远程库，可以用```git remote rm <name>```命令。使用前，建议先用```git remote -v```查看远程库信息：
+* 推送
+  * ```git push origin master```
+  * 如果远程分支不存在，则会自动创建一个同名的分支
+  * 3. 如果远程分支已经存在，但当前本地分支不在其中，则需要使用--set-upstream或-u选项来建立本地分支和远程分支之间的链接关系，例如：```git push -u origin new-feature```
+  * 可选参数：--force（或 -f），用于强制推送。当本地仓库与远程仓库存在冲突时，Git 通常会拒绝推送，以防止数据丢失。但在某些情况下，比如你已经确定自己的更新是正确的，可以使用--force选项强制推送，覆盖远程仓库中原有的数据。但需要谨慎使用该选项，因为它可能会导致其他协作开发者的代码被覆盖，造成不可预测的后果。
 ## 从远程库克隆
 * 假设我们从零开发，那么最好的方式是先创建远程库，然后，从远程库克隆。
     * 创建一个新的仓库
@@ -154,6 +159,14 @@
     ```git pull```git pull也失败了，原因是没有指定本地dev分支与远程origin/dev分支的链接，根据提示，设置dev和origin/dev的链接：```git branch --set-upstream-to=origin/dev dev```再pull,解决后，提交，再push：```git commit -m "fix env conflict"```,```git push origin dev```
 * fetch
   * ```git fetch```命令用于从远程 Git 仓库中拉取最新的变更,但不会自动将这些变更应用到当前分支上。相比于git pull命令，git fetch命令更加安全，因为它只是简单地同步变更，并在本地仓库中创建一个指向远程分支的“引用”，而不会自动将这些变更应用到当前分支上。
+    *   ```
+        # 指定要获取的远程分支名称 upstream/master
+        git fetch upstream master
+        # 指定要获取的远程端 origin
+        git fetch origin
+        # 全部获取
+        git fetch
+        ```
     * git fetch命令的优点在于，它可以让开发者快速了解远程仓库的最新变更，而且不会自动修改本地分支的状态，这意味着开发者可以使用git diff或git merge命令在本地查看、比较和处理所拉取的变更，以便更好地控制代码的更新过程。
     * 当完成了针对远程分支的变更处理后，可以使用git merge命令或者git rebase命令将本地分支与远程分支合并，以便将所拉取的变更应用到当前分支中。
 ## Rebase
