@@ -72,6 +72,24 @@
 * 假设我们从零开发，那么最好的方式是先创建远程库，然后，从远程库克隆。
     * 创建一个新的仓库
     * git clone git@github.com:michaelliao/gitskills.git
+* 如果出现报错：
+  ```
+  ssh: connect to host github.com port 22: Connection timed out
+  fatal: Could not read from remote repository.
+  ```
+  解决方法如下：
+  
+  * 测试SSH连接：``` ssh -T git@github.com```,如果接续出现连接超时报错：```ssh: connect to host github.com port 22: Connection timed out```,意味着无法通过 22 端口进行 SSH 连接。
+  * 尝试使用以下命令，将 SSH 连接的端口更改为 443：```ssh -T -p 443 git@ssh.github.com```,如果显示以下信息：```Hi xxxx! You've successfully authenticated, but GitHub does not provide shell access.```这意味着通过 443 端口成功进行了身份验证，但 GitHub 不提供 shell 访问权限。
+  * 需要在 ~/.ssh/config 文件中覆盖 SSH 设置:```vim ~/.ssh/config```添加以下内容：
+    ```
+    # Add section below to it
+    Host github.com
+    Hostname ssh.github.com
+    Port 443
+    ```
+  * 最后，再次尝试使用以下命令进行 SSH 连接：```ssh -T git@github.com```如果显示以下信息：```Hi xxxxx! You've successfully authenticated, but GitHub does not provide shell access.```意味着成功通过 443 端口进行了身份验证，并且现在可以正常连接到 GitHub。
+  * 现在，您可以尝试再次克隆仓库：```git clone git@github.com:xxxxxx/xxxxx.git my-awesome-proj```
 # 分支管理
 ## 创建与合并分支
 * 截止到目前，只有一条时间线，在Git里，这个分支叫主分支，即master分支。HEAD严格来说不是指向提交，而是指向master，master才是指向提交的，所以，HEAD指向的就是当前分支。
